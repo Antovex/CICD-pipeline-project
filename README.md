@@ -79,15 +79,45 @@ To set up this project, you need to follow these steps:
 
     ```cat /var/jenkins_home/secrets/initialAdminPassword```
     
-    Install all the Recommended Plugins and enter all details.
+    Install the Suggested Plugins and enter all details.
     
-15. Go to the jenkins website and create a new Freestyle project and select “**Source Code Management**” as “git” and add your newly made public repo url. Finally Save it.
+15. Go to the jenkins website, click on "Create a job", then choose "Freestyle project" and select “**Source Code Management**” as “git” and add your newly made public repo url. Finally Save it.
 
-16. <p>Go to Dashboard > Manage Jenkins > Configuration<br>
+16. <p>Go to  Dashboard > Manage Jenkins > Plugins, on the left pane click on "Available Plugins" and search "Publish Over SSH" Plugin<br>
+    Install the Plugin and then scroll to the bottom and select the checkbox so that the jenkins restarts after the plugin installation is completed.</p>
+
+17. <p>After the restart, Login with your details, then<br>
+    Go to Dashboard > Manage Jenkins > Configuration<br>
     and scroll to the end and click “Add SSH server”<br>
     Add 2 servers, 1 is Jenkins with Private IP and Ansible with private IP.<br>
-    NOTE: Add Username as “root” and click on “Advance” and check “**Use password authentication, or use a different key**” and set the password that you used while creating new password.</p>
+    NOTE: Add Username as “root” and click on “Advance” and check “**Use password authentication, or use a different key**” and set the password that you used while creating new password in the servers itself.</p>
+    
+18. Go back to Dashboard then select your jenkins project, on the left pane select "Configure" and check that you have used the correct github repo link and also mentioned the correct branch (i.e. main or master)
 
+19. <p>Scroll down to the "Build Steps" section, then click on "Add build step" and choose "Send files or execute commands over SSH" from the dropdown menu.<br>
+   Select "Name" as Jenkins.<br>
+   Scroll down to "Exec command" and put the following command<br></p>
+   ```rsync -avh /var/lib/jenkins/workspace/<Name of your FreeStyle Project>/*.html root@<Private IP of Ansible server>:/opt/index.html```
+
+20. Under "Build Triggers", check "GitHub hook trigger for GITScm polling".
+
+21. <p>In the "Post-build Actions" section, click on "Add post-build action" and choose "Send build artifacts over SSH" from the dropdown menu.<br>
+   Select "Name" as "Ansible".<br>
+   Scroll down to "Exec command" and put the following command<br></p>
+   ```ansible-playbook <Full path of the playbook location>``` (Location at which you have the [playbook](https://github.com/Antovex/CICD-pipeline-project/blob/main/playbook/deploment.yml) in the Ansible server)
+
+22. <p>Open another browser window, open your github repo where you have your "index.html"<br>
+     Go to "Settings" (of the same repo)<br>
+     On the left pane click on "Webhooks" and then "Add webhook"<br>
+     Under the "Payload URL" enter your Jenkins url and append it with "/github-webhook/"<br>
+     Select "Content type" as "application/json"
+     For "Secret", go to Jenkins and click on the username on the top righthand corner, click on "configure", then under "API token" click "Add new Token" then generate it, then copy and paste it in the "Secret" field.<br>
+     Finally click on "Add webhook".<br>
+     Don't forget to "Save" the configuration done till now in the Jenkins also.</p>
+     
+23. To open the website just copy the "Public IP" of web-server and paste it in the browser.
+
+24. After this, whenever the Developer make changes to the index.html file and pushes it in the GitHub, the deployment and the changes will be automatically done.
 
 ## Project Demo
 
