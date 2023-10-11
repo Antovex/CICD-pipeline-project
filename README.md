@@ -25,7 +25,13 @@ To set up this project, you need to follow these steps:
 
 1. Make 4 instances in AWS (Free tier t2.micro will also work) with Amazon Linux 2023. Change the inbound rules for all the 4 VMs to accept "All Traffic" from "Anywhere IPv4" for demonstration.
    
-2. <p>Connect to all the servers in different tabs and rename using the below command as Jenkins, Ansible, Web-server and Dev-server.<br>
+2. <p>Connect to all the servers in different tabs and rename using the below command as Jenkins, Ansible, Web-server and Dev-server.<br></p>
+
+   ```javascript
+   import copyCodeBlock from '@pickra/copy-code-block';
+   // OR
+   const copyCodeBlock = require('@pickra/copy-code-block');
+   ```
    
    ```bash
    sudo su
