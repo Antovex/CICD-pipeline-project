@@ -36,7 +36,7 @@ To set up this project, you need to follow these steps:
 
    Your will now see the respective names of the server.
    
-3.[Install and configure Jenkins](https://www.jenkins.io/doc/book/installing/) on the Jenkins server.
+3. [Install and configure Jenkins](https://www.jenkins.io/doc/book/installing/) on the Jenkins server.
 
 4. [Install and configure Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) on the Ansible server.
 
@@ -83,10 +83,10 @@ To set up this project, you need to follow these steps:
     
 15. Go to the jenkins website and create a new Freestyle project and select “**Source Code Management**” as “git” and add your newly made public repo url. Finally Save it.
 
-16. Go to Dashboard > Manage Jenkins > Configuration
-    and scroll to the end and click “Add SSH server”
-    Add 2 servers, 1 is Jenkins with Private IP and Ansible with private IP.
-    NOTE: Add Username as “root” and click on “Advance” and check “**Use password authentication, or use a different key**” and set the password that you used while creating new password.
+16. <p>Go to Dashboard > Manage Jenkins > Configuration<br>
+    and scroll to the end and click “Add SSH server”<br>
+    Add 2 servers, 1 is Jenkins with Private IP and Ansible with private IP.<br>
+    NOTE: Add Username as “root” and click on “Advance” and check “**Use password authentication, or use a different key**” and set the password that you used while creating new password.</p>
 
 
 ## Project Demo
