@@ -1,0 +1,6 @@
+- name: Copying html file from Ansible to Webserver
+  hosts: webserver
+  tasks:
+    - copy:
+        src: /opt/index.html
+        dest: /var/www/html
