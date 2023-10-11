@@ -25,86 +25,116 @@ To set up this project, you need to follow these steps:
 
 1. Make 4 instances in AWS (Free tier t2.micro will also work) with Amazon Linux 2023. Change the inbound rules for all the 4 VMs to accept "All Traffic" from "Anywhere IPv4" for demonstration.
    
-2. Connect to all the servers in different tabs and rename using the below command as Jenkins, Ansible, Web-server and Dev-server.
-   ```sudo su ```
+2. <p>Connect to all the servers in different tabs and rename using the below command as Jenkins, Ansible, Web-server and Dev-server.<br>
+   
+   ```bash
+   sudo su
+   ```
 
-   ```hostnamectl set-hostname <name>```
+   ```bash
+   hostnamectl set-hostname <name>
+   ```
 
-   ```exit```
+   ```bash
+   exit
+   ```
 
-   ```sudo su```
+   ```bash
+   sudo su
+   ```
 
    Your will now see the respective names of the server.
    
-3. [Install and configure Jenkins](https://www.jenkins.io/doc/book/installing/) on the Jenkins server.
+4. [Install and configure Jenkins](https://www.jenkins.io/doc/book/installing/) on the Jenkins server.
 
-4. [Install and configure Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) on the Ansible server.
+5. [Install and configure Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) on the Ansible server.
 
-5. [Install httpd](https://docs.oracle.com/en/operating-systems/oracle-linux/6/admin/install-apache.html) on the Web server.
+6. [Install httpd](https://docs.oracle.com/en/operating-systems/oracle-linux/6/admin/install-apache.html) on the Web server.
 
-6. [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) in the Jenkins and Dev-server.
+7. [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) in the Jenkins and Dev-server.
 
-7. In the ansible and the webserver we need to set passwordless Authentication so that Jenkins can connect to ansible server and ansible server can connect to webserver.
+8. In the ansible and the webserver we need to set passwordless Authentication so that Jenkins can connect to ansible server and ansible server can connect to webserver.
    
    Follow for the Jenkins, Ansible and Web-server.
    
-   ```passwd root (set a new password)```
+   ```bash
+   passwd root (set a new password)
+   ```
    
-   ```vi /etc/ssh/sshd_config```
+   ```bash
+   vi /etc/ssh/sshd_config
+   ```
    
    and uncomment “PermitRootLogin” and set it to “yes” and scroll down to “PasswordAuthentication” and set it to “yes also”.
    Then,
    
-   ```systemctl restart sshd```
+   ```bash
+   systemctl restart sshd
+   ```
    
-8. Now generate a new ssh key in jenkins server.
+10. Now generate a new ssh key in jenkins server.
 
-   ```ssh-keygen```
+   ```bash
+   ssh-keygen
+   ```
+   now just press "Enter" untill you got back to your terminal.
 
-9. Then copy the ssh key to ansible server as jenkins will communicate with ansible.
+11. Then copy the ssh key to ansible server as jenkins will communicate with ansible.
 
-    ```ssh-copy-id -i /root/.ssh/id_rsa.pub root@<Private IP of ansible server>```
+    ```bash
+    ssh-copy-id -i /root/.ssh/id_rsa.pub root@<Private IP of ansible server>
+    ```
 
-10. Do the above step for Ansible to Web-server.
+13. Do the above step for Ansible to Web-server.
 
-11. Add the PRIVATE IP of webserver in the Ansible Host/Inventory file.
+14. Add the PRIVATE IP of webserver in the Ansible Host/Inventory file.
 
-12. Create a new Github repo (Public) and add a new index.html file with simple text.
+15. Create a new Github repo (Public) and add a new index.html file with simple text.
 
-13. Open your Jenkins website using the public IP address of the Jenkins server and appending it with ":8080"\
+16. Open your Jenkins website using the public IP address of the Jenkins server and appending it with ":8080"\
     
-    ```http://<Public IP of Jenkins Server>:8080```
+    ```bash
+    http://<Public IP of Jenkins Server>:8080
+    ```
 
     Get Your temporary password using
 
-    ```cat /var/jenkins_home/secrets/initialAdminPassword```
-    
+    ```bash
+    cat /var/jenkins_home/secrets/initialAdminPassword
+    ```
     Install the Suggested Plugins and enter all details.
     
-15. Go to the jenkins website, click on "Create a job", then choose "Freestyle project" and select “**Source Code Management**” as “git” and add your newly made public repo url. Finally Save it.
+18. Go to the jenkins website, click on "Create a job", then choose "Freestyle project" and select "Source Code Management" as “git” and add your newly made public repo url. Finally Save it.
 
-16. <p>Go to  Dashboard > Manage Jenkins > Plugins, on the left pane click on "Available Plugins" and search "Publish Over SSH" Plugin<br>
+19. <p>Go to  Dashboard > Manage Jenkins > Plugins, on the left pane click on "Available Plugins" and search "Publish Over SSH" Plugin<br>
     Install the Plugin and then scroll to the bottom and select the checkbox so that the jenkins restarts after the plugin installation is completed.</p>
 
-17. <p>After the restart, Login with your details, then<br>
+20. <p>After the restart, Login with your details, then<br>
     Go to Dashboard > Manage Jenkins > Configuration<br>
     and scroll to the end and click “Add SSH server”<br>
     Add 2 servers, 1 is Jenkins with Private IP and Ansible with private IP.<br>
     NOTE: Add Username as “root” and click on “Advance” and check “**Use password authentication, or use a different key**” and set the password that you used while creating new password in the servers itself.</p>
     
-18. Go back to Dashboard then select your jenkins project, on the left pane select "Configure" and check that you have used the correct github repo link and also mentioned the correct branch (i.e. main or master)
+21. Go back to Dashboard then select your jenkins project, on the left pane select "Configure" and check that you have used the correct github repo link and also mentioned the correct branch (i.e. main or master)
 
-19. <p>Scroll down to the "Build Steps" section, then click on "Add build step" and choose "Send files or execute commands over SSH" from the dropdown menu.<br>
-   Select "Name" as Jenkins.<br>
-   Scroll down to "Exec command" and put the following command<br></p>
-   ```rsync -avh /var/lib/jenkins/workspace/<Name of your FreeStyle Project>/*.html root@<Private IP of Ansible server>:/opt/index.html```
+22. <p>Scroll down to the "Build Steps" section, then click on "Add build step" and choose "Send files or execute commands over SSH" from the dropdown menu.<br>
+    Select "Name" as Jenkins.<br>
+    Scroll down to "Exec command" and put the following command<br></p>
+    
+   ```bash
+   rsync -avh /var/lib/jenkins/workspace/<Name of your FreeStyle Project>/*.html root@<Private IP of Ansible server>:/opt/index.html
+   ```
 
 20. Under "Build Triggers", check "GitHub hook trigger for GITScm polling".
 
 21. <p>In the "Post-build Actions" section, click on "Add post-build action" and choose "Send build artifacts over SSH" from the dropdown menu.<br>
-   Select "Name" as "Ansible".<br>
-   Scroll down to "Exec command" and put the following command<br></p>
-   ```ansible-playbook <Full path of the playbook location>``` (Location at which you have the [playbook](https://github.com/Antovex/CICD-pipeline-project/blob/main/playbook/deploment.yml) in the Ansible server)
+    Select "Name" as "Ansible".<br>
+    Scroll down to "Exec command" and put the following command<br></p>
+    
+    ```bash
+    ansible-playbook <Full path of the playbook location>
+    ```
+    (Location at which you have the [playbook](https://github.com/Antovex/CICD-pipeline-project/blob/main/playbook/deploment.yml) in the Ansible server)
 
 22. <p>Open another browser window, open your github repo where you have your "index.html"<br>
      Go to "Settings" (of the same repo)<br>
