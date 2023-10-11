@@ -53,9 +53,8 @@ To set up this project, you need to follow these steps:
 
 7. [Install git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git) in the Jenkins and Dev-server.
 
-8. In the ansible and the webserver we need to set passwordless Authentication so that Jenkins can connect to ansible server and ansible server can connect to webserver.
-   
-   Follow for the Jenkins, Ansible and Web-server.
+8. <p>In the ansible and the webserver we need to set passwordless Authentication so that Jenkins can connect to ansible server and ansible server can connect to webserver.<br>
+   Follow for the Jenkins, Ansible and Web-server.<br></p>
    
    ```bash
    passwd root (set a new password)
@@ -74,10 +73,10 @@ To set up this project, you need to follow these steps:
    
 10. Now generate a new ssh key in jenkins server.
 
-   ```bash
-   ssh-keygen
-   ```
-   now just press "Enter" untill you got back to your terminal.
+    ```bash
+    ssh-keygen
+    ```
+    now just press "Enter" untill you got back to your terminal.
 
 11. Then copy the ssh key to ansible server as jenkins will communicate with ansible.
 
@@ -121,9 +120,9 @@ To set up this project, you need to follow these steps:
     Select "Name" as Jenkins.<br>
     Scroll down to "Exec command" and put the following command<br></p>
     
-   ```bash
-   rsync -avh /var/lib/jenkins/workspace/<Name of your FreeStyle Project>/*.html root@<Private IP of Ansible server>:/opt/index.html
-   ```
+    ```bash
+    rsync -avh /var/lib/jenkins/workspace/<Name of your FreeStyle Project>/*.html root@<Private IP of Ansible server>:/opt/index.html
+    ```
 
 20. Under "Build Triggers", check "GitHub hook trigger for GITScm polling".
 
